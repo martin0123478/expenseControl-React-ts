@@ -1,11 +1,15 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 
-export const Form = () => {
+export const FormBudget = () => {
     const [budget, setBudget] = useState(0)
     const handeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBudget(e.target.valueAsNumber)
     }
+
+    const isValid = useMemo(() => {
+        return isNaN(budget) || budget <= 0
+    }, [budget])
     return (
         <form action="" className='space-y-5'>
             <div className='flex flex-col space-y-5'>
@@ -21,7 +25,8 @@ export const Form = () => {
                 value={budget}
                 onChange={handeChange} />
             <input type="submit" value='Definir Presupuesto'
-                className='bg-blue-600 hover:bg-blue-700 cursor-pointer w-full p-2 text-white font-black uppercase' />
+                className='bg-blue-600 hover:bg-blue-700 cursor-pointer w-full p-2 text-white font-black uppercase disabled:opacity-40'
+                disabled={isValid} />
         </form>
     )
 }

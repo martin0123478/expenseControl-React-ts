@@ -1,4 +1,4 @@
-import { Form } from "./components/Form"
+import { FormBudget } from "./components/FormBudget"
 
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
 
       </header>
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-10 p-10">
-        <Form />
+        <FormBudget />
       </div>
     </>
   )
