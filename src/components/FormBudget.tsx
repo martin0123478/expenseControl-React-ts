@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react"
+import { useBudget } from "../Hooks/useBudget"
 
 
 export const FormBudget = () => {
     const [budget, setBudget] = useState(0)
+    const { dispatch } = useBudget()
     const handeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBudget(e.target.valueAsNumber)
     }
@@ -10,8 +12,15 @@ export const FormBudget = () => {
     const isValid = useMemo(() => {
         return isNaN(budget) || budget <= 0
     }, [budget])
+
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        dispatch({ type: 'add-budget', payload: { budget } })
+
+    }
     return (
-        <form action="" className='space-y-5'>
+        <form action="" className='space-y-5' onSubmit={handleSubmit}>
             <div className='flex flex-col space-y-5'>
                 <label htmlFor="budget" className='text-4xl text-blue-600 font-bold text-center'>
                     Definir presupuesto
