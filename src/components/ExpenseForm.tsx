@@ -16,15 +16,17 @@ export const ExpenseForm = () => {
         date: new Date()
 
     })
+    const [previusAmount, setPreviusAmount] = useState(0)
 
     const [error, setError] = useState('')
 
-    const { dispatch, state } = useBudget()
+    const { dispatch, state, expensesRemaining } = useBudget()
 
     useEffect(() => {
         if (state.editingId) {
             const editingExpense = state.expenses.filter(currentExpense => currentExpense.id === state.editingId)[0]
             setExpense(editingExpense)
+            setPreviusAmount(editingExpense.amount)
         }
     }, [state.editingId])
 
@@ -54,6 +56,10 @@ export const ExpenseForm = () => {
             setError('Todos los campor son obligatorios')
             return
         }
+        if ((expense.amount - previusAmount) > expensesRemaining) {
+            setError('Ese gasto sobrepasa el presupuesto')
+            return
+        }
         if (state.editingId) {
             dispatch({ type: 'update-expense', payload: { expense: { id: state.editingId, ...expense } } })
         } else {
@@ -65,8 +71,11 @@ export const ExpenseForm = () => {
             amount: 0,
             expenseName: '',
             category: '',
-            date: new Date()
+            date: new Date(),
+
+
         })
+        setPreviusAmount(0)
 
     }
     return (
