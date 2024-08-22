@@ -54,7 +54,12 @@ export const ExpenseForm = () => {
             setError('Todos los campor son obligatorios')
             return
         }
-        dispatch({ type: 'add-expense', payload: { expense } })
+        if (state.editingId) {
+            dispatch({ type: 'update-expense', payload: { expense: { id: state.editingId, ...expense } } })
+        } else {
+            dispatch({ type: 'add-expense', payload: { expense } })
+        }
+
         //reiniciar state
         setExpense({
             amount: 0,
@@ -66,7 +71,7 @@ export const ExpenseForm = () => {
     }
     return (
         <form className="space-y-5" onSubmit={handleSubmit}>
-            <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">Nuevo Gasto</legend>
+            <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">{state.editingId ? 'Editar Gasto' : 'Nuevo Gasto'}</legend>
             {error && <ErrorMessage>{error}</ErrorMessage>}
             <div className="flex flex-col gap-2">
                 <label htmlFor="expenseName"
@@ -133,7 +138,7 @@ export const ExpenseForm = () => {
             <input
                 type="submit"
                 className="bg-blue-600 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg "
-                value={'Registrar Gasto'}
+                value={state.editingId ? 'Editar Gasto' : 'Registrar Gasto'}
             />
         </form>
     )
